@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+	<context:annotation-config />
+	
+	<context:component-scan base-package="com.webservices" />
+	
+	<jpa:repositories base-package="com.webservices.repository" />
+	
+	<bean
+		class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="webservicejpa" />
+		<property name="dataSource" ref="dataSource" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="true" />
+			</bean>
+		</property>
+		<property name="jpaPropertyMap">
+			<map>
+				<entry key="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+				<entry key="hibernate.format_sql" value="false" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+	    <!-- Connection properties -->
+	    <property name="driverClass" value="${jdbc.driverClassName}" />
+	    <property name="jdbcUrl" value="${jdbc.url}" />
+	    <property name="user" value="${jdbc.username}" />
+	    <property name="password" value="${jdbc.password}" />
+	    <!-- Pool properties -->
+	    <property name="minPoolSize" value="5" />
+	    <property name="maxPoolSize" value="20" />
+	    <property name="acquireIncrement" value="1" />
+	    <property name="maxStatements" value="50" />
+	    <property name="idleConnectionTestPeriod" value="3000" />
+	    <property name="loginTimeout" value="300" />
+	   
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- MOLMORA APP RELATED BEANS : START-->
+	<!-- LOCAL/DEV ENVIRONMENT -->
+	<beans  profile="web_dev">
+		<context:property-placeholder location="classpath:web_dev.properties" />
+		<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+			<property name="basename">
+				<value>classpath:resourcebundles/molmoramessages</value>
+			</property>
+			<property name="defaultEncoding" value="UTF-8"/>
+		</bean>
+		
+		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		    <property name="targetClass">
+		        <value>org.springframework.util.Log4jConfigurer</value>
+		    </property>
+		    <property name="targetMethod">
+		        <value>initLogging</value>
+		    </property>
+		    <property name="arguments">
+		        <list>
+		            <value>classpath:log4j2.xml</value>
+		        </list>
+		    </property>
+		</bean>
+	</beans>
+	<!-- STG1 ENVIRONMENT -->
+	<beans  profile="molmora_stg1">
+		<context:property-placeholder location="classpath:molmora_stg1.properties" />
+		
+		<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename">
+			<value>classpath:resourcebundles/molmoramessages</value>
+		</property>
+		<property name="defaultEncoding" value="UTF-8"/>
+		</bean>
+		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		    <property name="targetClass">
+		        <value>org.springframework.util.Log4jConfigurer</value>
+		    </property>
+		    <property name="targetMethod">
+		        <value>initLogging</value>
+		    </property>
+		    <property name="arguments">
+		        <list>
+		            <value>classpath:log4j_molmora_stg1.properties</value>
+		        </list>
+		    </property>
+		</bean>
+	</beans>
+	<!-- STG2 ENVIRONMENT -->
+	<!-- PROD ENVIRONMENT -->
+	
+	<beans  profile="molmora_prod">
+		<context:property-placeholder location="classpath:molmora_prod.properties" />
+		
+		<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename">
+			<value>classpath:resourcebundles/molmoramessages</value>
+		</property>
+		<property name="defaultEncoding" value="UTF-8"/>
+		</bean>
+		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		    <property name="targetClass">
+		        <value>org.springframework.util.Log4jConfigurer</value>
+		    </property>
+		    <property name="targetMethod">
+		        <value>initLogging</value>
+		    </property>
+		    <property name="arguments">
+		        <list>
+		            <value>classpath:log4j_molmora_prod.properties</value>
+		        </list>
+		    </property>
+		</bean>
+	</beans>
+	
+	<!-- MOLMORA APP RELATED BEANS : END-->
+	
+	
+	<!-- INBOUND APP RELATED BEANS : START -->
+	<!-- LOCAL/DEV ENVIRONMENT -->
+	<beans  profile="inbound_dev">
+		<context:property-placeholder location="classpath:tangerine_inbound.properties" />
+		
+		<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+			<property name="basename">
+				<value>classpath:resourcebundles/inboundmessages</value>
+			</property>
+			<property name="defaultEncoding" value="UTF-8"/>
+		</bean>
+		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		    <property name="targetClass">
+		        <value>org.springframework.util.Log4jConfigurer</value>
+		    </property>
+		    <property name="targetMethod">
+		        <value>initLogging</value>
+		    </property>
+		    <property name="arguments">
+		        <list>
+		            <value>classpath:log4j_inbound_dev.properties</value>
+		        </list>
+		    </property>
+		</bean>
+	</beans>
+	<!-- STG1 ENVIRONMENT -->
+	<beans  profile="inbound_stg1">
+		<context:property-placeholder location="classpath:tangerine_inbound_stg1.properties" />
+		
+		<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+			<property name="basename">
+				<value>classpath:resourcebundles/inboundmessages</value>
+			</property>
+			<property name="defaultEncoding" value="UTF-8"/>
+		</bean>	
+		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		    <property name="targetClass">
+		        <value>org.springframework.util.Log4jConfigurer</value>
+		    </property>
+		    <property name="targetMethod">
+		        <value>initLogging</value>
+		    </property>
+		    <property name="arguments">
+		        <list>
+		            <value>classpath:log4j_inbound_stg1.properties</value>
+		        </list>
+		    </property>
+		</bean>
+	</beans>
+	<!-- STG2 ENVIRONMENT -->
+	<!-- PROD ENVIRONMENT -->
+	<!-- INBOUND APP RELATED BEANS : START -->
+</beans>
