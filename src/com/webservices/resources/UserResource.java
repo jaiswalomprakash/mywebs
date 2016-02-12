@@ -1,6 +1,7 @@
 package com.webservices.resources;
 
 import java.sql.Date;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.ws.rs.GET;
@@ -17,8 +18,10 @@ import org.apache.logging.log4j.Logger;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.webservices.custom.modal.LoginResponse;
 import com.webservices.exception.GenericReponse;
 import com.webservices.modal.UserAccesstoken;
+import com.webservices.modal.UserServiceMapping;
 import com.webservices.modal.Users;
 import com.webservices.repository.UserAccesstokenRepository;
 import com.webservices.services.UserAccessTokenServcieImpl;
@@ -55,6 +58,7 @@ public class UserResource {
 	public Response getMenuData(@QueryParam("email") String email,@QueryParam("password") String password)  throws Exception {
 		 Users user = null;
 		 GenericReponse response = new GenericReponse();
+		 LoginResponse loginResponse = null;
 		try{
 			user =userService.login("jaiswal.omprakash@gmail.com");
 			
@@ -103,7 +107,18 @@ public class UserResource {
 			Date validUntil = new Date(System.currentTimeMillis() + ttl);
 			userAccessToken.setValidUntil(validUntil);
 			userAccessToken = userAccessTokenService.storeToken(userAccessToken);
+			if(userAccessToken!=null){
+				loginResponse = new LoginResponse(user);
+				loginResponse.setToken(userAccessToken.getToken());
+			}
+			Set<UserServiceMapping> userServiceMappings =  user.getUserServiceMappings();
+			Long services [] = new Long [userServiceMappings.size()];
+			int arrayLength =0;
+			for (UserServiceMapping userServiceMapping : userServiceMappings) {
+				services[(arrayLength++)]=userServiceMapping.getServices().getServiceId();
+			}
 			
+			loginResponse.setServiceID(services);
 			//int p = 10/0;
 			
 		}
@@ -112,7 +127,7 @@ public class UserResource {
 			 throw new WebApplicationException(arithmeticException.getMessage());
 		}
 		return Response.ok(Response.Status.OK).header("content-type", MediaType.APPLICATION_JSON + ";charset=utf-8")
-				.entity(user).build();
+				.entity(loginResponse).build();
 	}
 	
 	

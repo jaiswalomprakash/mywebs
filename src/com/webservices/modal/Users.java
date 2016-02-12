@@ -57,7 +57,7 @@ public class Users extends GenericReponse implements java.io.Serializable {
 	private Set<Users> userses = new HashSet<Users>(0);
 	@JsonManagedReference("users-user_accesstoken")
 	private Set<UserAccesstoken> userAccesstokens = new HashSet<UserAccesstoken>(0);
-	@JsonIgnore
+	//@JsonIgnore
 	private Set<UserServiceMapping> userServiceMappings = new HashSet<UserServiceMapping>(
 			0);
 
