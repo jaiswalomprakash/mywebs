@@ -11,6 +11,6 @@ import com.webservices.modal.Users;
 @Repository("userAccesstoken")
 public interface UserAccesstokenRepository extends JpaRepository<UserAccesstoken, Long>{	
 	
-	UserAccesstoken save(UserAccesstoken persisted);
+	//UserAccesstoken saveAndFlush(UserAccesstoken persisted);
 
 }
