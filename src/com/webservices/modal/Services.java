@@ -1,6 +1,6 @@
 package com.webservices.modal;
 
-// Generated Feb 9, 2016 1:47:48 PM by Hibernate Tools 3.4.0.CR1
+// Generated Feb 15, 2016 12:31:18 PM by Hibernate Tools 3.4.0.CR1
 
 import java.util.Date;
 import java.util.HashSet;
@@ -37,6 +37,8 @@ public class Services implements java.io.Serializable {
 	private String personInChargeEmail;
 	private String personInChargePhonenumber;
 	private String uuid;
+	private Set<MyService> myServices = new HashSet<MyService>(0);
+	private Set<DailyService> dailyService = new HashSet<DailyService>(0);
 	private Set<ServiceCategory> serviceCategories = new HashSet<ServiceCategory>(
 			0);
 	private Set<UserServiceMapping> userServiceMappings = new HashSet<UserServiceMapping>(
@@ -57,7 +59,7 @@ public class Services implements java.io.Serializable {
 			Date createDate, String name, String personInCharge,
 			String personInChargeDivision, String personInChargeEmail,
 			String personInChargePhonenumber, String uuid,
-			Set<ServiceCategory> serviceCategories,
+			Set<MyService> myServices,Set<DailyService> dailyServices, Set<ServiceCategory> serviceCategories,
 			Set<UserServiceMapping> userServiceMappings,
 			Set<ServiceImageMapping> serviceImageMappings) {
 		this.companyLocation = companyLocation;
@@ -69,6 +71,8 @@ public class Services implements java.io.Serializable {
 		this.personInChargeEmail = personInChargeEmail;
 		this.personInChargePhonenumber = personInChargePhonenumber;
 		this.uuid = uuid;
+		this.myServices = myServices;
+		this.dailyService = dailyServices;
 		this.serviceCategories = serviceCategories;
 		this.userServiceMappings = userServiceMappings;
 		this.serviceImageMappings = serviceImageMappings;
@@ -104,7 +108,7 @@ public class Services implements java.io.Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "createDate", nullable = false, length = 19)
+	@Column(name = "createDate", nullable = false, length = 0)
 	public Date getCreateDate() {
 		return this.createDate;
 	}
@@ -166,6 +170,26 @@ public class Services implements java.io.Serializable {
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "services")
+	public Set<MyService> getMyServices() {
+		return this.myServices;
+	}
+
+	public void setMyServices(Set<MyService> myServices) {
+		this.myServices = myServices;
+	}
+	
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "services")
+	public Set<DailyService> getDailyService() {
+		return this.dailyService;
+	}
+
+	public void setDailyService(Set<DailyService> dailyService) {
+		this.dailyService = dailyService;
+	}
+
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "service_category_mapping", catalog = "mysql_service", joinColumns = { @JoinColumn(name = "serviceId", nullable = false, updatable = false) }, inverseJoinColumns = { @JoinColumn(name = "categoryId", nullable = false, updatable = false) })
