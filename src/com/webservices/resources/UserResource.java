@@ -60,7 +60,7 @@ public class UserResource {
 		 GenericReponse response = new GenericReponse();
 		 LoginResponse loginResponse = null;
 		try{
-			user =userService.login("jaiswal.omprakash@gmail.com");
+			user =userService.login(email);
 			
 			if (user == null)
 			{				

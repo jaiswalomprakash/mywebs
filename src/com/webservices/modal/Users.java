@@ -50,7 +50,7 @@ public class Users extends GenericReponse implements java.io.Serializable {
 	private String title;
 	private byte[] userImage;
 	private String userImageFilename;
-	@JsonIgnore
+	//@JsonIgnore
 	private Set<UserRoleMapping> userRoleMappings = new HashSet<UserRoleMapping>(
 			0);
 	@JsonIgnore
