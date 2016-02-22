@@ -3,6 +3,7 @@ package com.webservices.resources;
 import java.util.List;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -12,13 +13,11 @@ import javax.ws.rs.core.Response;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.formula.functions.Days360;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.webservices.custom.modal.DailyServiceList;
 import com.webservices.exception.GenericReponse;
 import com.webservices.modal.DailyService;
-import com.webservices.modal.DailyServiceId;
 import com.webservices.modal.Services;
 import com.webservices.services.DailyBasisService;
 
@@ -33,21 +32,20 @@ public class DailyServiceResource {
 	@POST
 	@Path("/storeDailyRecords")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getMenuData(DailyServiceId dailyServiceId)  throws Exception {
+	public Response getMenuData(@HeaderParam("token") String token,@HeaderParam("serviceID") String serviceID,@HeaderParam("userId") String userId,DailyService dailyService)  throws Exception {
 		 GenericReponse response = new GenericReponse();
-		try{
-			
-		
-		
+		try{			
+		System.out.println("DailyServiceResource.token()---"+token);
+		System.out.println("DailyServiceResource.serviceID()---"+serviceID);
+		System.out.println("DailyServiceResource.userId()---"+userId);		
 		 Services services = new Services();
-		 services.setServiceId(1L);		 
-		 DailyService dailyService = new DailyService();
-		
+		 services.setServiceId(Long.parseLong(serviceID));		 
+		 dailyService.setUserId(Integer.parseInt(userId));		
 		/* dailyServiceId.setActive("Y");
 		 dailyServiceId.setServiceId(1L);;
 		 dailyServiceId.setItemDesc("test");
 		 dailyServiceId.setType(1);*/
-		 dailyService.setId(dailyServiceId);
+		
 		 dailyService.setServices(services);
 		
 		 dailyBasisService.storeDailyBasisService(dailyService);

@@ -30,8 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class DailyService implements java.io.Serializable {
 
 	private Long id;
-    private String itemDesc;
-	
+    private String itemDesc;	
 	private Integer type;
 	private Integer userId;	
 	private Date createDate;
