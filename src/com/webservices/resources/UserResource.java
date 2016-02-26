@@ -1,6 +1,8 @@
 package com.webservices.resources;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,12 +21,11 @@ import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.webservices.custom.modal.LoginResponse;
+import com.webservices.custom.modal.ServiceResponse;
 import com.webservices.exception.GenericReponse;
 import com.webservices.modal.UserAccesstoken;
 import com.webservices.modal.UserServiceMapping;
 import com.webservices.modal.Users;
-import com.webservices.repository.UserAccesstokenRepository;
-import com.webservices.services.UserAccessTokenServcieImpl;
 import com.webservices.services.UserAccessTokenService;
 import com.webservices.services.UserService;
 import com.webservices.utils.Status;
@@ -112,13 +113,14 @@ public class UserResource {
 				loginResponse.setToken(userAccessToken.getToken());
 			}
 			Set<UserServiceMapping> userServiceMappings =  user.getUserServiceMappings();
-			Long services [] = new Long [userServiceMappings.size()];
-			int arrayLength =0;
+			//Long services [] = new Long [userServiceMappings.size()];
+			List<ServiceResponse> services = new ArrayList<ServiceResponse>();
+			
 			for (UserServiceMapping userServiceMapping : userServiceMappings) {
-				services[(arrayLength++)]=userServiceMapping.getServices().getServiceId();
+				services.add(new ServiceResponse(userServiceMapping.getServices()));
 			}
 			
-			loginResponse.setServiceID(services);
+			loginResponse.setServices(services);
 			//int p = 10/0;
 			
 		}

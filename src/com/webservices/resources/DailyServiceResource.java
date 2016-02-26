@@ -1,5 +1,8 @@
 package com.webservices.resources;
 
+import static org.junit.Assert.*;
+
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -13,12 +16,14 @@ import javax.ws.rs.core.Response;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.webservices.custom.modal.DailyServiceList;
 import com.webservices.exception.GenericReponse;
 import com.webservices.modal.DailyService;
 import com.webservices.modal.Services;
+import com.webservices.repository.DailyServiceRepository;
 import com.webservices.services.DailyBasisService;
 
 @Path("/dailyService")
@@ -56,7 +61,19 @@ public class DailyServiceResource {
 		return Response.status(Response.Status.OK).entity(response).build();
 		
 	}
+	@Autowired
+	DailyServiceRepository dailyServiceRepository;
 	
+	public static void main(String[] args) {
+		new DailyServiceResource().test();
+		
+	}
+	
+	  void test(){
+		
+		 System.out.println("DailyServiceResource.test()"+dailyServiceRepository.findByDatesBetween(new Date(), new Date(), 1L));
+		
+	}
 	
 	@GET
 	@Path("/getDailyRecords")

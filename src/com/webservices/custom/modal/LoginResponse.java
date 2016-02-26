@@ -1,6 +1,7 @@
 package com.webservices.custom.modal;
 
 import java.util.Date;
+import java.util.List;
 
 import com.webservices.exception.GenericReponse;
 import com.webservices.modal.Users;
@@ -21,8 +22,16 @@ public class LoginResponse extends GenericReponse {
 	private String title;
 	private byte[] userImage;
 	private String userImageFilename;	
-	private Long [] serviceID;
+	private List<ServiceResponse> services;
 	
+	public List<ServiceResponse> getServices() {
+		return services;
+	}
+
+	public void setServices(List<ServiceResponse> services) {
+		this.services = services;
+	}
+
 	private String token;
 	
 	public LoginResponse(Users user) {
@@ -155,14 +164,8 @@ public class LoginResponse extends GenericReponse {
 		this.token = token;
 	}
 
-	public Long[] getServiceID() {
-		return serviceID;
-	}
-
-	public void setServiceID(Long[] serviceID) {
-		this.serviceID = serviceID;
-	}
-
+	
+	
 	
 	
 
