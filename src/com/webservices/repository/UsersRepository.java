@@ -9,7 +9,7 @@ import com.webservices.modal.Users;
 
 @Repository("usersRepository")
 public interface UsersRepository extends JpaRepository<Users, Long>{	
-	@Query("select user from Users user where user.email=:email ")
+	@Query("select user from Users user where (user.email=:email or phoneNumber=:email) ")
 	 Users login(@Param("email") String email);
 
 }

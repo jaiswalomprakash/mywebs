@@ -36,6 +36,7 @@ public class DailyService implements java.io.Serializable {
 	private Date createDate;
 	private String active;
 	private Float price;
+	private String userName;
 
 	
 	@JsonIgnore
@@ -127,7 +128,15 @@ public class DailyService implements java.io.Serializable {
 		this.price = price;
 	}
 
-	
+	@Column(name = "field2")
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 
 	
 

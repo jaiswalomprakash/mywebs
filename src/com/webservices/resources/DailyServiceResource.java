@@ -1,7 +1,8 @@
 package com.webservices.resources;
 
-import static org.junit.Assert.*;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -16,7 +17,6 @@ import javax.ws.rs.core.Response;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.webservices.custom.modal.DailyServiceList;
@@ -61,29 +61,30 @@ public class DailyServiceResource {
 		return Response.status(Response.Status.OK).entity(response).build();
 		
 	}
-	@Autowired
-	DailyServiceRepository dailyServiceRepository;
 	
-	public static void main(String[] args) {
-		new DailyServiceResource().test();
-		
-	}
-	
-	  void test(){
-		
-		 System.out.println("DailyServiceResource.test()"+dailyServiceRepository.findByDatesBetween(new Date(), new Date(), 1L));
-		
-	}
 	
 	@GET
 	@Path("/getDailyRecords")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getMenuData()  throws Exception {
+	public Response getDailyRecords(@HeaderParam("serviceID") String serviceID)  throws Exception {
+		System.out.println("DailyServiceResource.serviceID()---"+serviceID);
 		 GenericReponse response = new GenericReponse();
+		 Calendar calendar = Calendar.getInstance();  
+			calendar.set(Calendar.DAY_OF_MONTH,calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+			Date startDate = calendar.getTime();  
+			calendar.add(Calendar.MONTH, 1);  
+			calendar.set(Calendar.DAY_OF_MONTH, 1);  
+			calendar.add(Calendar.DATE, -1);  
+
+			Date endDate = calendar.getTime();  
+
+			DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");  
+			System.out.println("Today            : " + sdf.format(startDate));  
+			System.out.println("Last Day of Month: " + sdf.format(endDate));
 		 DailyServiceList dailyServiceList =new DailyServiceList();
 		 List<DailyService> list ;
 		try{		
-			list = dailyBasisService.getDailyBasisService();
+			list = dailyBasisService.findByDatesBetween(startDate, endDate, Long.parseLong(serviceID));
 			dailyServiceList.setDailyServices(list);
 		 
 		}catch(Exception ex){
@@ -94,6 +95,22 @@ public class DailyServiceResource {
 		
 	}
 	
+	public static void main(String[] args) {
+		  
+
+		Calendar calendar = Calendar.getInstance();  
+		calendar.set(Calendar.DAY_OF_MONTH,calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+		Date firstDayOfMonth = calendar.getTime();  
+		calendar.add(Calendar.MONTH, 1);  
+		calendar.set(Calendar.DAY_OF_MONTH, 1);  
+		calendar.add(Calendar.DATE, -1);  
+
+		Date lastDayOfMonth = calendar.getTime();  
+
+		DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");  
+		System.out.println("Today            : " + sdf.format(firstDayOfMonth));  
+		System.out.println("Last Day of Month: " + sdf.format(lastDayOfMonth));
+	}
 	
 	
 	

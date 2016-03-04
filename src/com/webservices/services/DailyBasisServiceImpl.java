@@ -1,5 +1,6 @@
 package com.webservices.services;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,12 @@ public class DailyBasisServiceImpl implements DailyBasisService {
 	public List<DailyService> getDailyBasisService() {
 		
 		return dailyServiceRepository.findAll();
+	}
+
+	@Override
+	public List<DailyService> findByDatesBetween(Date startDate, Date endDate,
+			Long serviceId) {
+		return dailyServiceRepository.findByDatesBetween(startDate, endDate, serviceId);
 	}
 
 }
