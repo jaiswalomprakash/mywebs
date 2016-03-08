@@ -19,6 +19,7 @@ public class DailyBasisServiceImpl implements DailyBasisService {
 		return dailyServiceRepository.saveAndFlush(dailyService);
 	}
 	
+	
 	@Override
 	public List<DailyService> getDailyBasisService() {
 		
