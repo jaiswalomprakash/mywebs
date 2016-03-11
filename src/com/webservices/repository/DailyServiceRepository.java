@@ -12,9 +12,9 @@ import com.webservices.modal.DailyService;
 
 @Repository("dailyServiceRepository")
 public interface DailyServiceRepository extends JpaRepository<DailyService, Long> {
-
-	  @Query("select b from DailyService b where b.createDate >= :startDate and b.createDate <=:endDate and b.services.serviceId= :serviceId order by b.id desc ")
-	  List<DailyService> findByDatesBetween(@Param("startDate") Date startDate, @Param("endDate") Date endDate,@Param("serviceId") Long serviceId);
+	
+	 @Query("select b from DailyService b where b.dateCreated >= :startDate and b.dateCreated <=:endDate and b.service.serviceId= :serviceId order by b.id desc ")
+	 List<DailyService> findByDatesBetween(@Param("startDate") Date startDate, @Param("endDate") Date endDate,@Param("serviceId") Integer serviceId);
 	  
 	  	  
 	}

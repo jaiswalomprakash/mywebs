@@ -19,11 +19,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.webservices.custom.modal.DailyServiceList;
+import com.webservices.dto.DailyServiceList;
 import com.webservices.exception.GenericReponse;
 import com.webservices.modal.DailyService;
-import com.webservices.modal.Services;
-import com.webservices.repository.DailyServiceRepository;
+import com.webservices.modal.Service;
+import com.webservices.modal.User;
 import com.webservices.services.DailyBasisService;
 
 @Path("/dailyService")
@@ -43,15 +43,17 @@ public class DailyServiceResource {
 		System.out.println("DailyServiceResource.token()---"+token);
 		System.out.println("DailyServiceResource.serviceID()---"+serviceID);
 		System.out.println("DailyServiceResource.userId()---"+userId);		
-		 Services services = new Services();
-		 services.setServiceId(Long.parseLong(serviceID));		 
-		 dailyService.setUserId(Integer.parseInt(userId));		
+		Service service = new Service();
+		 service.setServiceId(Integer.parseInt(serviceID));
+		 User user = new User();
+		 user.setUserId(Integer.parseInt(userId));
+	//	 dailyService.setUser(user);
 		/* dailyServiceId.setActive("Y");
 		 dailyServiceId.setServiceId(1L);;
 		 dailyServiceId.setItemDesc("test");
 		 dailyServiceId.setType(1);*/
 		
-		 dailyService.setServices(services);
+		 dailyService.setService(service);
 		
 		 dailyBasisService.storeDailyBasisService(dailyService);
 		}catch(Exception ex){
@@ -84,7 +86,7 @@ public class DailyServiceResource {
 		 DailyServiceList dailyServiceList =new DailyServiceList();
 		 List<DailyService> list ;
 		try{		
-			list = dailyBasisService.findByDatesBetween(startDate, endDate, Long.parseLong(serviceID));
+			list = dailyBasisService.findByDatesBetween(startDate, endDate, Integer.parseInt(serviceID));
 			dailyServiceList.setDailyServices(list);
 		 
 		}catch(Exception ex){

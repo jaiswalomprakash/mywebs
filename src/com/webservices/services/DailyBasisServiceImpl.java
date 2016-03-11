@@ -28,7 +28,7 @@ public class DailyBasisServiceImpl implements DailyBasisService {
 
 	@Override
 	public List<DailyService> findByDatesBetween(Date startDate, Date endDate,
-			Long serviceId) {
+			Integer serviceId) {
 		return dailyServiceRepository.findByDatesBetween(startDate, endDate, serviceId);
 	}
 

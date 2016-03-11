@@ -1,21 +1,19 @@
-package com.webservices.custom.modal;
+package com.webservices.dto;
 
-import java.util.Date;
-
-import com.webservices.modal.Services;
+import com.webservices.modal.Service;
 
 public class ServiceResponse {
 
-	private Long serviceId;	
+	private Integer serviceId;	
 	private String name;
-	public ServiceResponse(Services services) {
+	public ServiceResponse(Service services) {
 		this.serviceId = services.getServiceId();
 		this.name=services.getName();
 	}
-	public Long getServiceId() {
+	public Integer getServiceId() {
 		return serviceId;
 	}
-	public void setServiceId(Long serviceId) {
+	public void setServiceId(Integer serviceId) {
 		this.serviceId = serviceId;
 	}
 	public String getName() {

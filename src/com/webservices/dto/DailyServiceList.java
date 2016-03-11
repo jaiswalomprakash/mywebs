@@ -1,4 +1,4 @@
-package com.webservices.custom.modal;
+package com.webservices.dto;
 
 import java.util.List;
 

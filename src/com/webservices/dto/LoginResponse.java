@@ -1,10 +1,10 @@
-package com.webservices.custom.modal;
+package com.webservices.dto;
 
 import java.util.Date;
 import java.util.List;
 
 import com.webservices.exception.GenericReponse;
-import com.webservices.modal.Users;
+import com.webservices.modal.User;
 
 public class LoginResponse extends GenericReponse {
 	
@@ -34,11 +34,11 @@ public class LoginResponse extends GenericReponse {
 
 	private String token;
 	
-	public LoginResponse(Users user) {
+	public LoginResponse(User user) {
 		this.userId = user.getUserId();
 		this.email=user.getEmail();
 		this.mobilePhoneNumber=user.getMobilePhoneNumber();
-		this.realname=user.getRealname();
+		this.realname=user.getRealName();
 		
 		
 	}

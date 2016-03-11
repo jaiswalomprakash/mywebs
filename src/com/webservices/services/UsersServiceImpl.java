@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import com.webservices.modal.Users;
+import com.webservices.modal.User;
 import com.webservices.repository.UsersRepository;
 
 @Service("UserService")
@@ -23,7 +23,7 @@ public class UsersServiceImpl implements UserService {
 	@Autowired
 	private MessageSource messageSource;
 	@Override
-	public Users login(String emailOrPhone) {
+	public User login(String emailOrPhone) {
 		return usersRepository.login(emailOrPhone);
 	}
 

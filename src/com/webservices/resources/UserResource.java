@@ -3,7 +3,6 @@ package com.webservices.resources;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.ws.rs.GET;
@@ -20,12 +19,12 @@ import org.apache.logging.log4j.Logger;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.webservices.custom.modal.LoginResponse;
-import com.webservices.custom.modal.ServiceResponse;
+import com.webservices.dto.LoginResponse;
+import com.webservices.dto.ServiceResponse;
 import com.webservices.exception.GenericReponse;
+import com.webservices.modal.User;
 import com.webservices.modal.UserAccesstoken;
 import com.webservices.modal.UserServiceMapping;
-import com.webservices.modal.Users;
 import com.webservices.services.UserAccessTokenService;
 import com.webservices.services.UserService;
 import com.webservices.utils.Status;
@@ -46,18 +45,17 @@ public class UserResource {
 	@Autowired
 	private UserAccessTokenService userAccessTokenService;
 	/**
-	 * Gets the menu data.
-	 *
-	 * @param menu_id the menu_id
-	 * @param language the language
-	 * @return the menu data
-	 * @throws InboundException the inbound exception
+	 * This method used to validate email and password
+	 * @param email
+	 * @param password
+	 * @return
+	 * @throws Exception
 	 */
 	@GET
 	@Path("/Login")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getMenuData(@QueryParam("email") String email,@QueryParam("password") String password)  throws Exception {
-		 Users user = null;
+		 User user = null;
 		 GenericReponse response = new GenericReponse();
 		 LoginResponse loginResponse = null;
 		try{
@@ -94,7 +92,7 @@ public class UserResource {
 			//store accesstoken
 			UserAccesstoken userAccessToken = new UserAccesstoken();
 			userAccessToken.setToken(accessToken.toString());
-			userAccessToken.setUsers(user);
+			userAccessToken.setUser(user);
 			int ttl = 24 * 60 * 60 * 1000;
 			try
 			{
@@ -112,12 +110,12 @@ public class UserResource {
 				loginResponse = new LoginResponse(user);
 				loginResponse.setToken(userAccessToken.getToken());
 			}
-			Set<UserServiceMapping> userServiceMappings =  user.getUserServiceMappings();
+			List<UserServiceMapping> userServiceMappings =  user.getUserServiceMappings();
 			//Long services [] = new Long [userServiceMappings.size()];
 			List<ServiceResponse> services = new ArrayList<ServiceResponse>();
 			
 			for (UserServiceMapping userServiceMapping : userServiceMappings) {
-				services.add(new ServiceResponse(userServiceMapping.getServices()));
+				services.add(new ServiceResponse(userServiceMapping.getService()));
 			}
 			
 			loginResponse.setServices(services);
