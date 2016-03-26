@@ -7,9 +7,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import com.webservices.modal.UserAccesstoken;
-import com.webservices.modal.Users;
 import com.webservices.repository.UserAccesstokenRepository;
-import com.webservices.repository.UsersRepository;
 
 @Service("UserAccessTokenServcieImpl")
 public class UserAccessTokenServcieImpl implements UserAccessTokenService {

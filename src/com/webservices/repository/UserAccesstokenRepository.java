@@ -6,11 +6,20 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.webservices.modal.UserAccesstoken;
-import com.webservices.modal.Users;
 
+/**
+ * UserAccesstokenRepository Interface
+ * @author om
+ *
+ */
 @Repository("userAccesstoken")
-public interface UserAccesstokenRepository extends JpaRepository<UserAccesstoken, Long>{	
+public interface UserAccesstokenRepository extends JpaRepository<UserAccesstoken, Long>{
 	
-	//UserAccesstoken saveAndFlush(UserAccesstoken persisted);
+	@Query("select UserAccesstoken from UserAccesstoken userAccesstoken where userAccesstoken.token=:token ) ")
+	 UserAccesstoken getAccessTokenBytoken(@Param("token") String tokan);
+	
+	 
+	
+	
 
 }

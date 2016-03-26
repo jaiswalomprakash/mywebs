@@ -5,9 +5,15 @@
             Persistence unit for Tangerine Inbound project
         </description>
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <class>com.webservices.modal.Users</class>
+        <class>com.webservices.modal.User</class>
         <class>com.webservices.modal.UserAccesstoken</class>
         <class>com.webservices.modal.DailyService</class>
+         <class>com.webservices.modal.DailyService</class>
+          <class>com.webservices.modal.UserRoleMapping</class>
+           <class>com.webservices.modal.UserRoleMappingPK</class>
+           <class>com.webservices.modal.UserServiceMapping</class>
+           <class>com.webservices.modal.UserServiceMappingPK</class>
+           
         
 	<!-- 	<class>com.tangerine.inbound.entity.Coupon</class>
 		<class>com.tangerine.inbound.entity.CouponTranslation</class>

@@ -11,6 +11,7 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -19,11 +20,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.webservices.custom.modal.DailyServiceList;
+import com.webservices.dto.DailyServiceList;
 import com.webservices.exception.GenericReponse;
 import com.webservices.modal.DailyService;
-import com.webservices.modal.Services;
-import com.webservices.repository.DailyServiceRepository;
+import com.webservices.modal.Service;
+import com.webservices.modal.User;
 import com.webservices.services.DailyBasisService;
 
 @Path("/dailyService")
@@ -40,18 +41,20 @@ public class DailyServiceResource {
 	public Response getMenuData(@HeaderParam("token") String token,@HeaderParam("serviceID") String serviceID,@HeaderParam("userId") String userId,DailyService dailyService)  throws Exception {
 		 GenericReponse response = new GenericReponse();
 		try{			
-		System.out.println("DailyServiceResource.token()---"+token);
-		System.out.println("DailyServiceResource.serviceID()---"+serviceID);
+		//System.out.println("DailyServiceResource.token()---"+token);
+		//System.out.println("DailyServiceResource.serviceID()---"+serviceID);
 		System.out.println("DailyServiceResource.userId()---"+userId);		
-		 Services services = new Services();
-		 services.setServiceId(Long.parseLong(serviceID));		 
-		 dailyService.setUserId(Integer.parseInt(userId));		
+		Service service = new Service();
+		 service.setServiceId(Integer.parseInt(serviceID));
+		 User user = new User();
+		 user.setUserId(Integer.parseInt(userId));
+		 dailyService.setUser(user);
 		/* dailyServiceId.setActive("Y");
 		 dailyServiceId.setServiceId(1L);;
 		 dailyServiceId.setItemDesc("test");
 		 dailyServiceId.setType(1);*/
 		
-		 dailyService.setServices(services);
+		 dailyService.setService(service);
 		
 		 dailyBasisService.storeDailyBasisService(dailyService);
 		}catch(Exception ex){
@@ -67,7 +70,7 @@ public class DailyServiceResource {
 	@Path("/getDailyRecords")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDailyRecords(@HeaderParam("serviceID") String serviceID)  throws Exception {
-		System.out.println("DailyServiceResource.serviceID()---"+serviceID);
+	//	System.out.println("DailyServiceResource.serviceID()---"+serviceID);
 		 GenericReponse response = new GenericReponse();
 		 Calendar calendar = Calendar.getInstance();  
 			calendar.set(Calendar.DAY_OF_MONTH,calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
@@ -79,12 +82,12 @@ public class DailyServiceResource {
 			Date endDate = calendar.getTime();  
 
 			DateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");  
-			System.out.println("Today            : " + sdf.format(startDate));  
-			System.out.println("Last Day of Month: " + sdf.format(endDate));
+			//System.out.println("Today            : " + sdf.format(startDate));  
+		//	System.out.println("Last Day of Month: " + sdf.format(endDate));
 		 DailyServiceList dailyServiceList =new DailyServiceList();
 		 List<DailyService> list ;
 		try{		
-			list = dailyBasisService.findByDatesBetween(startDate, endDate, Long.parseLong(serviceID));
+			list = dailyBasisService.findByDatesBetween(startDate, endDate, Integer.parseInt(serviceID));
 			dailyServiceList.setDailyServices(list);
 		 
 		}catch(Exception ex){
@@ -92,6 +95,27 @@ public class DailyServiceResource {
 		}
 			
 		return Response.status(Response.Status.OK).entity(dailyServiceList).build();
+		
+	}
+	
+	@GET
+	@Path("/getDailyServiceById")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getDailyServiceById(@HeaderParam("serviceID") String serviceID,@QueryParam("service_id") Integer service_id)  throws Exception {
+		//System.out.println("DailyServiceResource.serviceID()---"+service_id);
+		 GenericReponse response = new GenericReponse();
+		 
+		 DailyService DailyService =new DailyService();
+		 List<DailyService> list ;
+		try{		
+			DailyService = dailyBasisService.getDailyBasisServiceById(service_id);
+			
+		 
+		}catch(Exception ex){
+			 throw new WebApplicationException(ex.getMessage());
+		}
+			
+		return Response.status(Response.Status.OK).entity(DailyService).build();
 		
 	}
 	

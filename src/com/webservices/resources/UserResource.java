@@ -3,10 +3,11 @@ package com.webservices.resources;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -17,15 +18,21 @@ import javax.ws.rs.core.Response;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.HibernateException;
+import org.hibernate.usertype.UserType;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 
-import com.webservices.custom.modal.LoginResponse;
-import com.webservices.custom.modal.ServiceResponse;
+import com.webservices.dto.AccountRequest;
+import com.webservices.dto.LoginResponse;
+import com.webservices.dto.ServiceResponse;
 import com.webservices.exception.GenericReponse;
+import com.webservices.modal.User;
 import com.webservices.modal.UserAccesstoken;
 import com.webservices.modal.UserServiceMapping;
-import com.webservices.modal.Users;
+import com.webservices.services.EmailService;
+import com.webservices.services.HelperService;
 import com.webservices.services.UserAccessTokenService;
 import com.webservices.services.UserService;
 import com.webservices.utils.Status;
@@ -45,23 +52,31 @@ public class UserResource {
 	
 	@Autowired
 	private UserAccessTokenService userAccessTokenService;
+	
+	@Autowired
+	private HelperService helperService;
+	
+	@Autowired
+	private EmailService emailService;
+	
+	@Autowired
+	private MessageSource messageSource; 
 	/**
-	 * Gets the menu data.
-	 *
-	 * @param menu_id the menu_id
-	 * @param language the language
-	 * @return the menu data
-	 * @throws InboundException the inbound exception
+	 * This method used to validate email and password
+	 * @param email
+	 * @param password
+	 * @return
+	 * @throws Exception
 	 */
 	@GET
 	@Path("/Login")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getMenuData(@QueryParam("email") String email,@QueryParam("password") String password)  throws Exception {
-		 Users user = null;
+		 User user = null;
 		 GenericReponse response = new GenericReponse();
 		 LoginResponse loginResponse = null;
 		try{
-			user =userService.login(email);
+			user =userService.getUser(email);
 			
 			if (user == null)
 			{				
@@ -94,7 +109,7 @@ public class UserResource {
 			//store accesstoken
 			UserAccesstoken userAccessToken = new UserAccesstoken();
 			userAccessToken.setToken(accessToken.toString());
-			userAccessToken.setUsers(user);
+			userAccessToken.setUser(user);
 			int ttl = 24 * 60 * 60 * 1000;
 			try
 			{
@@ -112,12 +127,12 @@ public class UserResource {
 				loginResponse = new LoginResponse(user);
 				loginResponse.setToken(userAccessToken.getToken());
 			}
-			Set<UserServiceMapping> userServiceMappings =  user.getUserServiceMappings();
+			List<UserServiceMapping> userServiceMappings =  user.getUserServiceMappings();
 			//Long services [] = new Long [userServiceMappings.size()];
 			List<ServiceResponse> services = new ArrayList<ServiceResponse>();
 			
 			for (UserServiceMapping userServiceMapping : userServiceMappings) {
-				services.add(new ServiceResponse(userServiceMapping.getServices()));
+				services.add(new ServiceResponse(userServiceMapping.getService()));
 			}
 			
 			loginResponse.setServices(services);
@@ -130,6 +145,75 @@ public class UserResource {
 		}
 		return Response.ok(Response.Status.OK).header("content-type", MediaType.APPLICATION_JSON + ";charset=utf-8")
 				.entity(loginResponse).build();
+	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/createAccount")
+	public Response createAccount(AccountRequest accountRequest,@QueryParam("language") String language) throws Exception {
+		GenericReponse response = new GenericReponse();		
+		try
+		{			
+			Response checkResponse = helperService.doAccesstokenChecks(accountRequest.getAccessToken());
+			if (checkResponse == null || checkResponse.getStatus() != Response.Status.OK.getStatusCode())
+			{
+				return checkResponse;
+			}
+			
+			//check if email address is already in user
+		if (userService.getUserByEmail(accountRequest.getEmail()) != null)
+		{
+			Status status = new Status(Status.EMAIL_IN_USE);
+			response.setStatusObject(status);
+			LOGGER.log(Level.INFO, status.toString());
+			return Response.status(Response.Status.OK).entity(response).build();
+		}
+		
+		int userType = -1;
+		try
+		{
+			Integer userTypeInteger = new Integer(accountRequest.getUserType());
+			userType = userTypeInteger.intValue();
+		}
+		catch (NumberFormatException e)
+		{
+			
+			LOGGER.log(Level.INFO, Response.Status.INTERNAL_SERVER_ERROR.toString());
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+		}
+		
+		// server side input validation 
+		//check privileges
+		if (userType == 0)
+		{
+			
+			Status status = new Status(Status.NO_PRIVILEGE);
+			response.setStatusObject(status);
+			LOGGER.log(Level.INFO, status.toString());
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response).build();
+		} 
+		if(accountRequest.getServiceIds()==null || accountRequest.getServiceIds().length==0){
+			Status status = new Status(Status.NO_SERVICE);
+			response.setStatusObject(status);
+			LOGGER.log(Level.INFO, status.toString());
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response).build();
+		}
+							
+		User user =userService.storeUser(accountRequest,userType);
+		if(user!=null){
+			emailService.sendMail(user.getEmail(), messageSource.getMessage("mail.subject",null,null), messageSource.getMessage("mail.createaccount",new Object[]{accountRequest.getPassword()},null));
+			
+		}
+		return Response.status(Response.Status.OK).entity(user).build();		
+		
+	}catch (HibernateException e)
+		{			
+			Status status = new Status(Status.INVALID_EMAIL);
+			response.setStatusObject(status);
+			LOGGER.log(Level.INFO, status.toString());
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response).build();
+		}
 	}
 	
 	
