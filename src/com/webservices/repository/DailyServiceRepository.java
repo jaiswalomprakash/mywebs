@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.webservices.modal.DailyService;
 
 @Repository("dailyServiceRepository")
+
 public interface DailyServiceRepository extends JpaRepository<DailyService, Integer> {
 	
 	 @Query("select b from DailyService b where b.dateCreated >= :startDate and b.dateCreated <=:endDate and b.service.serviceId= :serviceId order by b.id desc ")

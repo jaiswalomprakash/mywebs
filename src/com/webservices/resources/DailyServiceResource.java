@@ -48,7 +48,11 @@ public class DailyServiceResource {
 		 service.setServiceId(Integer.parseInt(serviceID));
 		 User user = new User();
 		 user.setUserId(Integer.parseInt(userId));
+
 		 dailyService.setUser(user);
+
+	//	 dailyService.setUser(user);
+
 		/* dailyServiceId.setActive("Y");
 		 dailyServiceId.setServiceId(1L);;
 		 dailyServiceId.setItemDesc("test");

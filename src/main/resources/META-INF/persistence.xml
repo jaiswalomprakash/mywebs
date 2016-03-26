@@ -2,7 +2,7 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
 	<persistence-unit name="webservicejpa" transaction-type="RESOURCE_LOCAL">
 		 <description>
-            Persistence unit for Tangerine Inbound project
+            Persistence unit for  project
         </description>
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <class>com.webservices.modal.User</class>
@@ -15,81 +15,6 @@
            <class>com.webservices.modal.UserServiceMappingPK</class>
            
         
-	<!-- 	<class>com.tangerine.inbound.entity.Coupon</class>
-		<class>com.tangerine.inbound.entity.CouponTranslation</class>
-		<class>com.tangerine.inbound.entity.CouponTranslationPK</class>
-		<class>com.tangerine.inbound.entity.Customerbrand</class>
-		<class>com.tangerine.inbound.entity.CustomerbrandTranslation</class>
-		<class>com.tangerine.inbound.entity.CustomerbrandTranslationPK</class>
-		<class>com.tangerine.inbound.entity.Customerprofile</class>
-		<class>com.tangerine.inbound.entity.CustomerprofileTranslation</class>
-		<class>com.tangerine.inbound.entity.CustomerprofileTranslationPK</class>
-		<class>com.tangerine.inbound.entity.MallRegion</class>
-		<class>com.tangerine.inbound.entity.MallRegionPK</class>
-		<class>com.tangerine.inbound.entity.Mallprofile</class>
-		<class>com.tangerine.inbound.entity.MallprofileTranslation</class>
-		<class>com.tangerine.inbound.entity.MallprofileTranslationPK</class>
-		<class>com.tangerine.inbound.entity.MdbCountry</class>
-		<class>com.tangerine.inbound.entity.MdbCountryTranslation</class>
-		<class>com.tangerine.inbound.entity.MdbCreditcardtype</class>
-		<class>com.tangerine.inbound.entity.MdbLanguage</class>
-		<class>com.tangerine.inbound.entity.MdbMalltype</class>
-		<class>com.tangerine.inbound.entity.MdbMalltypeTranslation</class>
-		<class>com.tangerine.inbound.entity.MdbMalltypeTranslationPK</class>
-		<class>com.tangerine.inbound.entity.MdbMerchandizetype</class>
-		<class>com.tangerine.inbound.entity.MdbMerchandizetypeTranslation</class>
-		<class>com.tangerine.inbound.entity.MdbMerchandizetypeTranslationPK</class>
-		<class>com.tangerine.inbound.entity.MdbPaymenttype</class>
-		<class>com.tangerine.inbound.entity.MdbPaymenttypeTranslation</class>
-		<class>com.tangerine.inbound.entity.MdbPaymenttypeTranslationPK</class>
-		<class>com.tangerine.inbound.entity.MdbStatePerfecture</class>
-		<class>com.tangerine.inbound.entity.MdbStatePerfectureTranslation</class>
-		<class>com.tangerine.inbound.entity.MdbStatePerfectureTranslationPK</class>
-		<class>com.tangerine.inbound.entity.MdbStateRegion</class>
-		<class>com.tangerine.inbound.entity.MdbStateRegionTranslation</class>
-		<class>com.tangerine.inbound.entity.MdbStateRegionTranslationPK</class>
-		<class>com.tangerine.inbound.entity.MdbStoremerchandizetype</class>
-		<class>com.tangerine.inbound.entity.MdbStoremerchandizetypePK</class>
-		<class>com.tangerine.inbound.entity.MdbStoretype</class>
-		<class>com.tangerine.inbound.entity.MdbStoretypeTranslation</class>
-		<class>com.tangerine.inbound.entity.MdbStoretypeTranslationPK</class>
-		<class>com.tangerine.inbound.entity.MolmoraFeatureBrand</class>
-		<class>com.tangerine.inbound.entity.MolmoraFeatureBrandTranslation</class>
-		<class>com.tangerine.inbound.entity.MolmoraFeatureBrandTranslationPK</class>
-		<class>com.tangerine.inbound.entity.Promotion</class>
-		<class>com.tangerine.inbound.entity.PromotionTranslation</class>
-		<class>com.tangerine.inbound.entity.PromotionTranslationPK</class>
-		<class>com.tangerine.inbound.entity.StorePromotion</class>
-		<class>com.tangerine.inbound.entity.StoreoptionMall</class>
-		<class>com.tangerine.inbound.entity.StoreoptionMallPK</class>
-		<class>com.tangerine.inbound.entity.StoreoptionMerchandizetype</class>
-		<class>com.tangerine.inbound.entity.StoreoptionPayment</class>
-		<class>com.tangerine.inbound.entity.Storeprofile</class>
-		<class>com.tangerine.inbound.entity.StoreprofileTranslation</class>
-		<class>com.tangerine.inbound.entity.StoreprofileTranslationPK</class>
-		<class>com.tangerine.inbound.entity.UserAction</class>
-		<class>com.tangerine.inbound.entity.UserCoupon</class>
-		<class>com.tangerine.inbound.entity.UserCouponPK</class>
-		<class>com.tangerine.inbound.entity.Product</class>
-		<class>com.tangerine.inbound.entity.ProductsTranslation</class>
-		<class>com.tangerine.inbound.entity.ProductsTranslationPK</class>
-		<class>com.tangerine.inbound.entity.MdbCategory</class>
-		<class>com.tangerine.inbound.entity.MdbCategoryTranslationPK</class>	
-		<class>com.tangerine.inbound.entity.MdbCategoryTranslation</class>	
-		<class>com.tangerine.inbound.entity.DisplayCoupon</class>
-		<class>com.tangerine.inbound.entity.DisplayFoodFeature</class>
-		<class>com.tangerine.inbound.entity.DisplayFoodFeatureItem</class>
-		<class>com.tangerine.inbound.entity.DisplayFoodFeatureItemPK</class>
-		<class>com.tangerine.inbound.entity.DisplayFoodFeatureTranslation</class>
-		<class>com.tangerine.inbound.entity.DisplayFoodFeatureTranslationPK</class>
-		<class>com.tangerine.inbound.entity.DisplayFoodHome</class>
-		<class>com.tangerine.inbound.entity.DisplayFoodMenuItem</class>
-		<class>com.tangerine.inbound.entity.DisplayFoodMenuItemPK</class>
-		<class>com.tangerine.inbound.entity.FoodMenuAttribute</class>
-		<class>com.tangerine.inbound.entity.FoodMenu</class>
-		<class>com.tangerine.inbound.entity.FoodMenuTranslation</class>
-		<class>com.tangerine.inbound.entity.FoodMenuTranslationPK</class>
-		<class>com.tangerine.inbound.entity.FoodOptionCategory</class>
-		<class>com.tangerine.inbound.entity.FoodOptionCategoryPK</class>  -->
+	
 	</persistence-unit>
 </persistence>
