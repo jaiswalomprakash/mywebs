@@ -24,7 +24,7 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="jpaVendorAdapter">
 			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-				<property name="showSql" value="false" />
+				<property name="showSql" value="true" />
 			</bean>
 		</property>
 		<property name="jpaPropertyMap">
@@ -42,30 +42,18 @@
 	    <property name="user" value="${jdbc.username}" />
 	    <property name="password" value="${jdbc.password}" />
 	    <!-- Pool properties -->
-	<!--  <property name="minPoolSize" value="5" />
+	    <property name="minPoolSize" value="5" />
 	    <property name="maxPoolSize" value="20" />
 	    <property name="acquireIncrement" value="1" />
 	    <property name="maxStatements" value="50" />
 	    <property name="idleConnectionTestPeriod" value="3000" />
-	    <property name="loginTimeout" value="300" /> --> 
+	    <property name="testConnectionOnCheckout" value="true" />
+		<property name="preferredTestQuery" value="SELECT 1" />
 	    
 	    
-	    <!-- pool sizing -->
-	<property name="initialPoolSize" value="1" />
-	<property name="minPoolSize" value="1" />
-	<property name="maxPoolSize" value="1" />
-	<property name="acquireIncrement" value="1" />
-	<property name="maxStatements" value="5" />
-	
-	<!-- refreshing connections -->
-	<property name="maxIdleTime" value="10" /> <!-- 10sec -->
-	<property name="maxConnectionAge" value="10" /> <!-- 1h -->
-	<!-- timeouts and testing -->
-	<!-- <property name="checkoutTimeout" value="5000" />  --><!-- 5s -->
-	<property name="idleConnectionTestPeriod" value="1" /> <!-- 60 -->
-	<property name="testConnectionOnCheckout" value="true" />
-	<property name="preferredTestQuery" value="SELECT 1" />
-        <property name="testConnectionOnCheckin" value="true" />
+	    
+	    
+	    
 	   
 	</bean>
 
@@ -107,7 +95,6 @@
     	<bean id="customeMailMessage" class="org.springframework.mail.SimpleMailMessage">
         <property name="from" value="${mail.from}" /> 
        </bean>
-		
 		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
 		    <property name="targetClass">
 		        <value>org.springframework.util.Log4jConfigurer</value>
@@ -228,5 +215,4 @@
 	<!-- STG2 ENVIRONMENT -->
 	<!-- PROD ENVIRONMENT -->
 	<!-- INBOUND APP RELATED BEANS : START -->
-
 </beans>
