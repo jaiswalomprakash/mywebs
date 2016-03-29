@@ -21,17 +21,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @EntityListeners(org.springframework.data.jpa.domain.support.AuditingEntityListener.class)
 @MappedSuperclass
 public abstract class BaseEntity {
-	
+
 	/** The date created. */
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate
 	//@JsonIgnore
-	@Column(name="date_created",updatable=false)	
+	@Column(name="date_created",updatable=true)
 	private Date dateCreated;
 
 	/** The date updated. */
 	@Temporal(TemporalType.TIMESTAMP)
-	@LastModifiedDate	
+	@LastModifiedDate
 	@JsonIgnore
 	@Column(name="date_updated")
 	private Date dateUpdated;
@@ -39,12 +39,12 @@ public abstract class BaseEntity {
 	/** The deleted flag. */
 	@Column(name="deleted_flag")
 	private Byte deletedFlag;
-	
+
 	/** The author id. */
 	@Column(name="author_id")
 	private String authorID;
-	
-	
+
+
 	/**
 	 * Gets the author id.
 	 *
@@ -54,7 +54,7 @@ public abstract class BaseEntity {
 		return this.authorID;
 	}
 
-	
+
 	/**
 	 * Sets the author id.
 	 *
@@ -63,7 +63,7 @@ public abstract class BaseEntity {
 	public void setAuthorID(String authorID) {
 		this.authorID = authorID;
 	}
-	
+
 	/**
 	 * Gets the date created.
 	 *
@@ -117,13 +117,13 @@ public abstract class BaseEntity {
 	public void setDeletedFlag(Byte deletedFlag) {
 		this.deletedFlag = deletedFlag;
 	}
-	
+
 	@PrePersist
     public void prePersist() {
 		setDateCreated(new Date());
 		setDateUpdated(new Date());
     }
-	
+
 	@PreUpdate
 	public void preUpdate(){
 		setDateUpdated(new Date());
@@ -178,5 +178,5 @@ public abstract class BaseEntity {
 		return true;
 	}
 
-	
+
 }

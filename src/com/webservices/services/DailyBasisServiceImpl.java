@@ -15,14 +15,14 @@ public class DailyBasisServiceImpl implements DailyBasisService {
 	DailyServiceRepository dailyServiceRepository;
 	@Override
 	public DailyService storeDailyBasisService(DailyService dailyService) {
-		
+
 		return dailyServiceRepository.saveAndFlush(dailyService);
 	}
-	
-	
+
+
 	@Override
 	public List<DailyService> getDailyBasisService() {
-		
+
 		return dailyServiceRepository.findAll();
 	}
 
@@ -31,11 +31,18 @@ public class DailyBasisServiceImpl implements DailyBasisService {
 			Integer serviceId) {
 		return dailyServiceRepository.findByDatesBetween(startDate, endDate, serviceId);
 	}
-	
+
+	@Override
 	public DailyService getDailyBasisServiceById(Integer serviceId){
-		
+
 		return dailyServiceRepository.findOne(serviceId);
-		
+
+	}
+
+public void deleteDailyBasisServiceById(Integer serviceId){
+
+		 dailyServiceRepository.delete(serviceId);
+
 	}
 
 }
