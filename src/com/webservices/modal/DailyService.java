@@ -1,14 +1,26 @@
 package com.webservices.modal;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
  * The persistent class for the my_service database table.
- * 
+ *
  */
 @Entity
 @Table(name="my_service")
@@ -22,11 +34,11 @@ public class DailyService extends BaseEntity implements Serializable {
 	private int id;
 
 	@Column(name = "field1")
-    private String itemDesc;	
+    private String itemDesc;
 	@Column(name = "intfield1")
 	private Integer type;
-	
-	
+
+
 	private String active;
 	@Column(name = "floatfield1", precision = 12, scale = 0)
 	private Float price;
@@ -44,6 +56,11 @@ public class DailyService extends BaseEntity implements Serializable {
 	@JoinColumn(name="user_id", nullable=false)
 	private User user;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="service_date")
+	private Date serviceDate;
+
+
 	public DailyService() {
 	}
 
@@ -54,10 +71,10 @@ public class DailyService extends BaseEntity implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-	
 
-	
+
+
+
 	public String getItemDesc() {
 		return itemDesc;
 	}
@@ -65,7 +82,7 @@ public class DailyService extends BaseEntity implements Serializable {
 	public void setItemDesc(String itemDesc) {
 		this.itemDesc = itemDesc;
 	}
-	
+
 	public Integer getType() {
 		return type;
 	}
@@ -73,7 +90,7 @@ public class DailyService extends BaseEntity implements Serializable {
 	public void setType(Integer type) {
 		this.type = type;
 	}
-	
+
 	// @JsonProperty("bill-amount")
 	@Column(name = "active", nullable = false, length = 1)
 	public String getActive() {
@@ -83,7 +100,7 @@ public class DailyService extends BaseEntity implements Serializable {
 	public void setActive(String active) {
 		this.active = active;
 	}
-  
+
 	@Column(name = "floatfield1", precision = 12, scale = 0)
 	public Float getPrice() {
 		return price;
@@ -118,5 +135,14 @@ public class DailyService extends BaseEntity implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	public Date getServiceDate() {
+		return this.serviceDate;
+	}
+
+	public void setServiceDate(Date serviceDate) {
+		this.serviceDate = serviceDate;
+	}
+
 
 }

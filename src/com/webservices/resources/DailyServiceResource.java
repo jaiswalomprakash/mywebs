@@ -73,11 +73,12 @@ public class DailyServiceResource {
 	@GET
 	@Path("/getDailyRecords")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getDailyRecords(@HeaderParam("serviceID") String serviceID)  throws Exception {
+	public Response getDailyRecords(@HeaderParam("serviceID") String serviceID,@QueryParam("month") Integer month)  throws Exception {
 	//	System.out.println("DailyServiceResource.serviceID()---"+serviceID);
 		 GenericReponse response = new GenericReponse();
 		 Calendar calendar = Calendar.getInstance();
 			calendar.set(Calendar.DAY_OF_MONTH,calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+			calendar.add(Calendar.MONTH,month);
 			Date startDate = calendar.getTime();
 			calendar.add(Calendar.MONTH, 1);
 			calendar.set(Calendar.DAY_OF_MONTH, 1);
